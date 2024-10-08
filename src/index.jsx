@@ -7,19 +7,27 @@ import {
 import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
 import ReactDOM from 'react-dom';
 
-import Header from '@edx/frontend-component-header';
 import FooterSlot from '@openedx/frontend-slot-footer';
+import {
+  Route, Routes,
+} from 'react-router-dom';
 import messages from './i18n';
-import ExamplePage from './example/ExamplePage';
-
 import './index.scss';
+import Head from './Head';
+import Attendance from './attendance/attendance';
+import NotFoundPage from './notFoundPage';
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
     <AppProvider>
-      <Header />
-      <ExamplePage />
-      <FooterSlot />
+      {/* <Header /> */}
+      <Head />
+      <Routes>
+        <Route exact path="/attendance/courses/:courseId/:id" element={<Attendance />} />
+        <Route path="*" element={<NotFoundPage />} />
+        {/* <Route exact path="/faq" element={<FAQPage />} /> */}
+      </Routes>
+      {/* <FooterSlot /> */}
     </AppProvider>,
     document.getElementById('root'),
   );
@@ -31,4 +39,5 @@ subscribe(APP_INIT_ERROR, (error) => {
 
 initialize({
   messages,
+  requireAuthenticatedUser: true,
 });
